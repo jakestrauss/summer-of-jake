@@ -22,10 +22,6 @@ const testPicLatLong = {
   lat: 44.285763, 
   lng: -121.536175
 };
-const testIcon = {
-  url: "https://storage.googleapis.com/summer_of_jake_map_pictures/dog_test.jpg"
-  // scaledSize: new window.google.maps.Size(30, 30)
-};
 
 function App() {
   const {isLoaded, loadError} = useJsApiLoader({
@@ -34,6 +30,11 @@ function App() {
 
   if (loadError) return (<>Error loading maps</>);
   if (!isLoaded) return (<>Loading maps</>);
+
+  const testIcon = {
+    url: "https://storage.googleapis.com/summer_of_jake_map_pictures/dog_test.jpg",
+    scaledSize: new window.google.maps.Size(20, 20)
+  };
 
   return (
     <div>
