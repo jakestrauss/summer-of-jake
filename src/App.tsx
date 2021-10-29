@@ -10,10 +10,13 @@ const center = {
   lat: 40.644366,
   lng: -39.872822
 };
-const options = {
+const maOptions = {
   styles: mapStyles,
   disableDefaultUI: true,
   zoomControl: true
+}
+const kmlOptions = {
+  suppressInfoWindows: true
 }
 
 function App() {
@@ -31,10 +34,21 @@ function App() {
         mapContainerStyle={mapContainerStyle} 
         zoom={3}
         center={center}
-        options={options}
+        options={maOptions}
       >
 
-        <KmlLayer url="https://storage.googleapis.com/strava-kmls/mergedKML_1635298225660.kml" />
+        <KmlLayer 
+          url="https://storage.googleapis.com/strava-kmls/2019_road_trip_final.kmz"
+          options={kmlOptions} 
+        />
+        <KmlLayer 
+          url="https://storage.googleapis.com/strava-kmls/2021_spring_road_trip_7.kmz"
+          options={kmlOptions} 
+        />
+        <KmlLayer 
+          url="https://storage.googleapis.com/strava-kmls/2021_fall_road_trip_3.kmz"
+          options={kmlOptions} 
+        />
       </GoogleMap>
     </div>
   );
