@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { GoogleMap, KmlLayer, Marker } from '@react-google-maps/api';
+import { GoogleMap, KmlLayer, Marker, useJsApiLoader } from '@react-google-maps/api';
 import mapStyles from './../mapStyles';
 import RouteURLService from '../services/RouteURLService';
 import MarkerService from '../services/MarkerService';
@@ -21,7 +21,11 @@ const kmlOptions = {
     suppressInfoWindows: true
 };
 
-export default function Map( {loadError, isLoaded} ) {
+export default function Map() {
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ""
+    });
+
     const [routes, setRoutes] = useState(0);
     const [markers, setMarkers] = useState(1);
     useEffect(() => {
