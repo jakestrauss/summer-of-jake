@@ -26,16 +26,16 @@ export default function Map() {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ""
     });
 
-    const [routes, setRoutes] = useState(0);
-    const [markers, setMarkers] = useState(1);
+    const [routes, setRoutes] = useState([]);
+    const [markers, setMarkers] = useState([]);
     useEffect(() => {
-        setRoutes(RouteURLService.getRoutes())
-        setMarkers(MarkerService.getMarkers())
-    });
+        RouteURLService.getRoutes().then(result => setRoutes(result));
+        MarkerService.getMarkers().then(result => setMarkers(result));
+    }, []);
 
     if (loadError)
         return (<>Error loading maps</>);
-    if (!isLoaded)
+    if (!isLoaded || !routes)
         return (<>Loading maps</>);
     const markerSize = new window.google.maps.Size(20, 20);
 
