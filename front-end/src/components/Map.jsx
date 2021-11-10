@@ -41,6 +41,59 @@ export default function Map() {
     const [pctOneWindowPos, setPctOneWindowPos] = useState({ lat: -25.363, lng: 131.044 });
     const [pctTwoWindow, setPctTwoWindow] = useState(false);
     const [pctTwoWindowPos, setPctTwoWindowPos] = useState({ lat: -25.363, lng: 131.044 });
+    const [trtWindow, setTrtWindow] = useState(false);
+    const [trtWindowPos, setTrtWindowPos] = useState({ lat: -25.363, lng: 131.044 });
+    const [spring21Window, setSpring21Window] = useState(false);
+    const [spring21WindowPos, setSpring21WindowPos] = useState({ lat: -25.363, lng: 131.044 });
+    const [fall21Window, setFall21Window] = useState(false);
+    const [fall21WindowPos, setFall21WindowPos] = useState({ lat: -25.363, lng: 131.044 });
+    
+
+    //Click events
+    const markerClick = () => {setInfoWindowVisible(true)};
+    const markerInfoWindowClose = () => {setInfoWindowVisible(false)};
+
+    const fall19Click = (mapsMouseEvent) => {
+        setFall19Window(true);
+        setFall19WindowPos(mapsMouseEvent.latLng);
+    };
+    const pctOneClick = (mapsMouseEvent) => {
+        setPctOneWindow(true);
+        setPctOneWindowPos(mapsMouseEvent.latLng);
+    };
+    const pctTwoClick = (mapsMouseEvent) => {
+        setPctTwoWindow(true);
+        setPctTwoWindowPos(mapsMouseEvent.latLng);
+    };
+    const trtClick = (mapsMouseEvent) => {
+        setTrtWindow(true);
+        setTrtWindowPos(mapsMouseEvent.latLng);
+    };
+    const spring21Click = (mapsMouseEvent) => {
+        setSpring21Window(true);
+        setSpring21WindowPos(mapsMouseEvent.latLng);
+    };
+    const fall21Click = (mapsMouseEvent) => {
+        setFall21Window(true);
+        setFall21WindowPos(mapsMouseEvent.latLng);
+    };
+    const pctOneClose = () => {setPctOneWindow(false)};
+    const pctTwoClose = () => {setPctTwoWindow(false)};
+    const fall19Close = () => {setFall19Window(false)};
+    const trtClose = () => {setTrtWindow(false)};
+    const spring21Close = () => {setSpring21Window(false)};
+    const fall21Close = () => {setFall21Window(false)};
+
+    const mapClick = () => {
+        fall19Close();
+        pctOneClose();
+        pctTwoClose();
+        markerInfoWindowClose();
+        trtClose();
+        spring21Close();
+        fall21Close();
+    }
+
 
     useEffect(() => {
         RouteURLService.getRoutes().then(result => setRoutes(result));
@@ -52,36 +105,7 @@ export default function Map() {
     if (!isLoaded || !routes)
         return (<>Loading maps</>);
     
-
     const markerSize = new window.google.maps.Size(20, 20);
-
-    //Click events
-    const markerClick = () => {setInfoWindowVisible(true)};
-    const markerInfoWindowClose = () => {setInfoWindowVisible(false)};
-
-    const fall19Click = (mapsMouseEvent) => {
-        setFall19Window(true);
-        setFall19WindowPos(mapsMouseEvent.latLng);
-    };
-    const fall19Close = () => {setFall19Window(false)};
-    const pctOneClick = (mapsMouseEvent) => {
-        setPctOneWindow(true);
-        setPctOneWindowPos(mapsMouseEvent.latLng);
-    };
-    const pctTwoClick = (mapsMouseEvent) => {
-        setPctTwoWindow(true);
-        setPctTwoWindowPos(mapsMouseEvent.latLng);
-    };
-    const pctOneClose = () => {setPctOneWindow(false)};
-    const pctTwoClose = () => {setPctTwoWindow(false)};
-
-
-    const mapClick = () => {
-        fall19Close();
-        pctOneClose();
-        pctTwoClose();
-        markerInfoWindowClose();
-    }
 
     return (
         <div>
@@ -135,6 +159,42 @@ export default function Map() {
                         </InfoWindow>
                 }
                 </>
+
+                <KmlLayer key={`Tahoe_Rim_Trail`} url="https://storage.googleapis.com/strava-kmls/Tahoe_Rim_Trail_1.kmz" options={hardCodedKmlOptions} onClick={trtClick} />
+                {
+                    trtWindow
+                    && <InfoWindow key={`trtInfoWindow`} visible={false} onCloseClick={trtClose} options={kmlInfoWindowOptions} position={trtWindowPos}>
+                        <div>
+                            <h2 className="kml-info-window-title">Trial run: Quick Lap around a Lake</h2>
+                            <p className="kml-info-window-body">During my 2019 road trip, I decided to try out my first small solo thru-hike by circumnavigating Lake Tahoe on the 170-mile Tahoe Rim Trail.</p>
+                        </div>
+                        </InfoWindow>
+                }
+
+                <KmlLayer key={`spring21`} url="https://storage.googleapis.com/strava-kmls/2021_spring_road_trip_10.kmz" options={hardCodedKmlOptions} onClick={spring21Click} />
+                {
+                    spring21Window
+                    && <InfoWindow key={`spring21Window`} visible={false} onCloseClick={spring21Close} options={kmlInfoWindowOptions} position={spring21WindowPos}>
+                        <div>
+                            <h2 className="kml-info-window-title">Eastbound and Down: The Summer of Jake begins</h2>
+                            <p className="kml-info-window-body">On March 1st 2021, I quit my job at Amazon and started driving back east to leave my car and life belongings at my parents' house for the
+                            duration of my PCT thru-hike. Along the way I was able to fit in some skiing, kayaking, desert exploration, and was able to catch up with some old friends.</p>
+                        </div>
+                        </InfoWindow>
+                }
+
+                <KmlLayer key={`fall21`} url="https://storage.googleapis.com/strava-kmls/2021_fall_road_trip_4.kmz" options={hardCodedKmlOptions} onClick={fall21Click} />
+                {
+                    fall21Window
+                    && <InfoWindow key={`fall21Window`} visible={false} onCloseClick={fall21Close} options={kmlInfoWindowOptions} position={fall21WindowPos}>
+                        <div>
+                            <h2 className="kml-info-window-title">Westward Again: The Oregon Trail</h2>
+                            <p className="kml-info-window-body">After completing the Pacific Crest Trail, I decided to move to Bend, OR to ski bum it for the winter.
+                            In October 2021 I set out west to begin the newest chapter of my life while checking out the I-90 highlights on the way.</p>
+                        </div>
+                        </InfoWindow>
+                }
+                
                 {
                     markers.map(marker => {
                         const localIcon = {
