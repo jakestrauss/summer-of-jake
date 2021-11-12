@@ -1,5 +1,6 @@
 package com.summerofjake.job.strava.api;
 
+import com.summerofjake.server.model.Marker;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
@@ -45,7 +46,34 @@ public class ActivityApi extends StravaApi {
         } catch (Exception e) {
             System.out.println("To string exception: " + e.getMessage());
         }
-
         return activityIds;
+    }
+
+    public List<Marker> getMarkersForActivity(String activityId) {
+        HttpUrl.Builder urlBuilder
+                = HttpUrl.parse(STRAVA_BASE_URL + "activities/" + activityId).newBuilder();
+        urlBuilder.addQueryParameter("access_token", accessToken);
+        String url = urlBuilder.build().toString();
+
+        Request request = new Request.Builder().url(url).build();
+
+        Call call = client.newCall(request);
+        ResponseBody responseBody = execute(call);
+
+        String photoUrl = null;
+
+        try {
+            JSONParser parser = new JSONParser(responseBody.string());
+            LinkedHashMap requestMap = (LinkedHashMap) parser.parse();
+            LinkedHashMap photosMap = (LinkedHashMap) requestMap.get("photos");
+            if(photosMap != null && !photosMap.isEmpty()) {
+                photoUrl = (String)((LinkedHashMap)((LinkedHashMap)photosMap.get("primary")).get("urls")).get("600");
+                System.out.println(photoUrl);
+            }
+        } catch (Exception e) {
+            System.out.println("Parsing exception: " + e.getMessage());
+        }
+
+        return null;
     }
 }

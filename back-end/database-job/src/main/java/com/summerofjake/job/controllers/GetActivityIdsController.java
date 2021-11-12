@@ -1,26 +1,27 @@
 package com.summerofjake.job.controllers;
 
 import com.summerofjake.job.strava.api.ActivityApi;
-import com.summerofjake.server.model.Route;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GetRoutesController {
+public class GetActivityIdsController {
     private ActivityApi activityApi;
 
-    public GetRoutesController(ActivityApi activityApi) {
+    public GetActivityIdsController(ActivityApi activityApi) {
         this.activityApi = activityApi;
     }
 
-    public List<Route> getRoutes() {
+    public List<Long> getActivityIds() {
+        List<Long> activityIds = new ArrayList<>();
         try {
-            List<Long> activityIds = activityApi.getLoggedInAthleteActivities();
+            activityIds = activityApi.getLoggedInAthleteActivities();
             System.out.println(Arrays.toString(activityIds.toArray()));
         } catch(Exception e) {
             System.out.println("Get Activities call failed " + e.toString());
         }
 
-        return null;
+        return activityIds;
     }
 }
