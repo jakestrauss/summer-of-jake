@@ -32,9 +32,9 @@ export default function Map() {
     });
 
     //State variables
+    const [selectedMarker, setSelectedMarker] = useState(null);
     const [routes, setRoutes] = useState([]);
     const [markers, setMarkers] = useState([]);
-    const [infoWindowVisible, setInfoWindowVisible] = useState(false);
     const [fall19Window, setFall19Window] = useState(false);
     const [fall19WindowPos, setFall19WindowPos] = useState({ lat: -25.363, lng: 131.044 });
     const [pctOneWindow, setPctOneWindow] = useState(false);
@@ -50,9 +50,6 @@ export default function Map() {
     
 
     //Click events
-    const markerClick = () => {setInfoWindowVisible(true)};
-    const markerInfoWindowClose = () => {setInfoWindowVisible(false)};
-
     const fall19Click = (mapsMouseEvent) => {
         setFall19Window(true);
         setFall19WindowPos(mapsMouseEvent.latLng);
@@ -88,10 +85,10 @@ export default function Map() {
         fall19Close();
         pctOneClose();
         pctTwoClose();
-        markerInfoWindowClose();
         trtClose();
         spring21Close();
         fall21Close();
+        setSelectedMarker(null);
     }
 
 
@@ -200,14 +197,19 @@ export default function Map() {
                         const localIcon = {
                             url: marker.url,
                             scaledSize: markerSize
-                        }
+                        };
+                        const imgStyle = {
+                            maxWidth: `100%`,
+                            maxHeight: `100%`,
+                            objectFit: `cover`
+                        };
                         return(
                             <>
-                                <Marker position={marker.latLong} icon={localIcon} key={`marker-${marker.latLong}`} onClick={markerClick}>
+                                <Marker position={marker.latLong} icon={localIcon} key={`marker-${marker.latLong}`} onClick={() => setSelectedMarker(marker)}>
                                 </Marker>
-                                {infoWindowVisible 
-                                    && <InfoWindow key={`infoWindow-${marker.latLong}`} visible={false} position={marker.latLong} onCloseClick={markerInfoWindowClose}>
-                                        <div><img src={marker.url} alt="Marker"></img></div>
+                                {selectedMarker === marker
+                                    && <InfoWindow key={`infoWindow-${marker.latLong}`} visible={false} position={marker.latLong} onCloseClick={() => setSelectedMarker(null)}>
+                                        <div><img style={imgStyle} src={marker.url} alt="Marker"></img></div>
                                     </InfoWindow>
                                 }
                             </>   
