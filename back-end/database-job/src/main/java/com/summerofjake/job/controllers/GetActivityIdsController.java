@@ -17,6 +17,7 @@ public class GetActivityIdsController {
         List<Long> activityIds = new ArrayList<>();
         try {
             activityIds = activityApi.getLoggedInAthleteActivities();
+            System.out.println("Activity Ids of last day:");
             System.out.println(Arrays.toString(activityIds.toArray()));
         } catch(Exception e) {
             System.out.println("Get Activities call failed " + e.toString());

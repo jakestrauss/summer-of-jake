@@ -1,13 +1,10 @@
 package com.summerofjake.job.strava.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import com.summerofjake.job.strava.api.exception.StravaAPIException;
 import com.summerofjake.job.strava.api.exception.StravaUnauthorizedException;
 import okhttp3.*;
 import org.apache.tomcat.util.json.JSONParser;
-import org.apache.tomcat.util.json.ParseException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -29,6 +26,9 @@ public abstract class StravaApi {
         this.accessToken = retrieveAccessToken();
     }
 
+    /*
+     * Call to retrieve current Strava access token using refresh token
+     */
     public String retrieveAccessToken() {
         String token = null;
 

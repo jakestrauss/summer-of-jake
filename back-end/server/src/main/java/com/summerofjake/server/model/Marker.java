@@ -14,12 +14,18 @@ public class Marker {
     private String url;
 
     @Column(name = "lat")
-    private long lat;
+    private double lat;
 
     @Column(name = "lng")
-    private long lng;
+    private double lng;
 
     public Marker() {}
+
+    public Marker(String url, double lat, double lng) {
+        this.url = url;
+        this.lat = lat;
+        this.lng = lng;
+    }
 
     public String getUrl() {
         return url;
@@ -29,19 +35,19 @@ public class Marker {
         this.url = url;
     }
 
-    public long getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(long lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public long getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public void setLng(long lng) {
+    public void setLng(double lng) {
         this.lng = lng;
     }
 }

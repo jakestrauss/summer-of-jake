@@ -1,5 +1,6 @@
 package com.summerofjake.job.activities;
 
+import com.google.common.collect.ImmutableList;
 import com.summerofjake.job.controllers.GetActivityIdsController;
 import com.summerofjake.job.strava.api.ActivityApi;
 
@@ -14,7 +15,6 @@ public class GetActivityIdsActivity {
 
     public List<Long> getActivityIds() {
         GetActivityIdsController getActivityIdsController = new GetActivityIdsController(activityApi);
-
         return getActivityIdsController.getActivityIds();
     }
 }
