@@ -1,9 +1,11 @@
 package com.summerofjake.job;
 
+import com.google.common.collect.ImmutableList;
 import com.summerofjake.job.activities.GetActivityIdsActivity;
 import com.summerofjake.job.activities.MarkersActivity;
 import com.summerofjake.job.activities.MarkersActivityImpl;
 import com.summerofjake.job.strava.api.ActivityApi;
+import com.summerofjake.server.model.Marker;
 
 import java.util.List;
 
@@ -14,6 +16,6 @@ public class JobRunner {
         List<Long> activityIds = getActivityIdsActivity.getActivityIds();
 
         MarkersActivity markersActivity = new MarkersActivityImpl(activityApi);
-        markersActivity.getMarkers(activityIds);
+        List<Marker> markers = markersActivity.getMarkers(activityIds);
     }
 }

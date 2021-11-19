@@ -1,11 +1,14 @@
 package com.summerofjake.job.db.client;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.summerofjake.server.model.Marker;
 import okhttp3.*;
 import org.apache.tomcat.util.json.JSONParser;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -16,8 +19,18 @@ public class JpaApi {
     private Gson gson;
 
     public JpaApi(){
-        this.client = new OkHttpClient.Builder().connectTimeout(100, TimeUnit.SECONDS).build();
-        this.gson = new Gson();
+        this.client = new OkHttpClient.Builder().connectTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(100, TimeUnit.SECONDS)
+                .writeTimeout(100, TimeUnit.SECONDS)
+                .build();
+
+        //Must register custom serializer for LocalDateTime since Gson doesn't recognize it
+        this.gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonSerializer() {
+            @Override
+            public JsonElement serialize(Object localDateTime, Type type, JsonSerializationContext jsonSerializationContext) {
+                return new JsonPrimitive(((LocalDateTime)localDateTime).format(DateTimeFormatter.ISO_DATE_TIME));
+            }
+        }).create();
     }
 
     public boolean postMarkers(List<Marker> markerList) throws IOException {

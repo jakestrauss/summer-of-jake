@@ -6,11 +6,16 @@ import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
+import org.apache.logging.log4j.util.Strings;
 import org.apache.tomcat.util.json.JSONParser;
 
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,6 +31,9 @@ public class ActivityApi extends StravaApi {
         HttpUrl.Builder urlBuilder
                 = HttpUrl.parse(STRAVA_BASE_URL + "athlete/activities").newBuilder();
         urlBuilder.addQueryParameter("access_token", accessToken);
+        //Get only activities from the last day
+        long yesterdaysEpoch = (Instant.now().toEpochMilli()/1000) - Duration.ofDays(1).getSeconds();
+        urlBuilder.addQueryParameter("after", String.valueOf(yesterdaysEpoch));
         String url = urlBuilder.build().toString();
 
         Request request = new Request.Builder().url(url).build();
@@ -60,8 +68,13 @@ public class ActivityApi extends StravaApi {
         Call call = client.newCall(request);
         ResponseBody responseBody = execute(call);
 
-        String photoUrl = null;
+        //Marker properties to extract from API response
+        String photoUrl = Strings.EMPTY;
         ArrayList<BigDecimal> latLng = new ArrayList<>();
+        LocalDateTime activityDate = LocalDateTime.now();
+        String activityTitle = Strings.EMPTY;
+        String activityDescription = Strings.EMPTY;
+
 
         try {
             JSONParser parser = new JSONParser(responseBody.string());
@@ -75,6 +88,11 @@ public class ActivityApi extends StravaApi {
                 return null;
             }
 
+            activityDate = LocalDateTime.parse((String)requestMap.get("start_date_local"), DateTimeFormatter.ISO_DATE_TIME);
+            activityTitle = (String)requestMap.get("name");
+            activityDescription = requestMap.get("description") != null
+                    ? (String)requestMap.get("description") : Strings.EMPTY;
+
             //Currently no geo-location data of photo accessible from Strava API, so must use start lat/lng
             latLng = (ArrayList)requestMap.get("start_latlng");
         } catch (Exception e) {
@@ -82,6 +100,8 @@ public class ActivityApi extends StravaApi {
         }
 
         //Currently only one photo marker per route, as this is all Strava's API currently provides
-        return ImmutableList.of(new Marker(photoUrl, latLng.get(0).doubleValue(), latLng.get(1).doubleValue()));
+        return ImmutableList.of(
+                new Marker(photoUrl, latLng.get(0).doubleValue(), latLng.get(1).doubleValue(),
+                        activityDate, activityTitle, activityDescription, activityId));
     }
 }

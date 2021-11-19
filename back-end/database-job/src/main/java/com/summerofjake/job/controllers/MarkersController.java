@@ -18,7 +18,7 @@ public class MarkersController {
         this.jpaApi = new JpaApi();
     }
 
-    public void getMarkers(List<Long> activityIds) {
+    public List<Marker> getMarkers(List<Long> activityIds) {
         //Get all markers from last day's worth of activities
         List<Marker> allMarkers = new ArrayList<>();
         for (Long activityId : activityIds) {
@@ -32,7 +32,8 @@ public class MarkersController {
 
         System.out.println("All marker info from activities in the last day:");
         for(Marker m : allMarkers) {
-            System.out.println(m.getUrl() + " " + m.getLat() + " " + m.getLng());
+            System.out.println(m.getActivityId() + " " + m.getActivityDate() +  " " + m.getUrl() + " " + m.getLat()
+                    + " " + m.getLng() + " " + m.getActivityTitle() + " |||| " + m.getActivityDescription());
         }
 
         //Write values to database
@@ -48,5 +49,7 @@ public class MarkersController {
         } else {
             System.out.println("Markers NOT successfully posted");
         }
+
+        return(allMarkers);
     }
 }
