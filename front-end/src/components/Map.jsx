@@ -5,6 +5,8 @@ import mapStyles from './../mapStyles';
 import RouteURLService from '../services/RouteURLService';
 import MarkerService from '../services/MarkerService';
 
+const dayjs = require('dayjs');
+
 //Map Constants
 const mapContainerStyle = {
     width: '100vw',
@@ -51,26 +53,32 @@ export default function Map() {
 
     //Click events
     const fall19Click = (mapsMouseEvent) => {
+        mapClick();
         setFall19Window(true);
         setFall19WindowPos(mapsMouseEvent.latLng);
     };
     const pctOneClick = (mapsMouseEvent) => {
+        mapClick();
         setPctOneWindow(true);
         setPctOneWindowPos(mapsMouseEvent.latLng);
     };
     const pctTwoClick = (mapsMouseEvent) => {
+        mapClick();
         setPctTwoWindow(true);
         setPctTwoWindowPos(mapsMouseEvent.latLng);
     };
     const trtClick = (mapsMouseEvent) => {
+        mapClick();
         setTrtWindow(true);
         setTrtWindowPos(mapsMouseEvent.latLng);
     };
     const spring21Click = (mapsMouseEvent) => {
+        mapClick();
         setSpring21Window(true);
         setSpring21WindowPos(mapsMouseEvent.latLng);
     };
     const fall21Click = (mapsMouseEvent) => {
+        mapClick();
         setFall21Window(true);
         setFall21WindowPos(mapsMouseEvent.latLng);
     };
@@ -199,17 +207,31 @@ export default function Map() {
                             scaledSize: markerSize
                         };
                         const imgStyle = {
+                            maxHeight: `50%`,
                             maxWidth: `100%`,
-                            maxHeight: `100%`,
-                            objectFit: `cover`
+                            width: `90%`,
+                            objectFit: `contain`
                         };
+                        const stravaUrl = "https://strava.com/activities/" + marker.activityId;
+                        const dateToDisplay = dayjs(marker.activityDate);
+
                         return(
                             <>
                                 <Marker position={marker.latLong} icon={localIcon} key={`marker-${marker.latLong}`} onClick={() => setSelectedMarker(marker)}>
                                 </Marker>
                                 {selectedMarker === marker
                                     && <InfoWindow key={`infoWindow-${marker.latLong}`} visible={false} position={marker.latLong} onCloseClick={() => setSelectedMarker(null)}>
-                                        <div><img style={imgStyle} src={marker.url} alt="Marker"></img></div>
+                                        <div>
+                                            <div className="image-container">
+                                                <img style={imgStyle} src={marker.url} alt="Marker"></img>
+                                            </div>
+                                            <div><h2 className="activity-title">{dateToDisplay.format('MM/DD/YYYY')}: {marker.activityTitle}</h2></div>
+                                            <div className = "marker-description">{marker.activityDescription}
+                                            <br></br>
+                                            <br></br>
+                                            <a href={stravaUrl} target="_blank">View on Strava</a>
+                                            </div>
+                                        </div>
                                     </InfoWindow>
                                 }
                             </>   

@@ -11,7 +11,18 @@ class MarkerService {
                 for(var i = 0; i < markersData.length; i++) {
                     var localUrl = response.data[i].url;
                     var localLatLong = {lat: response.data[i].lat, lng: response.data[i].lng};
-                    markers[i] = {latLong: localLatLong, url: localUrl};
+                    var localActivityTitle = response.data[i].activityTitle;
+                    var localActivityDescription = response.data[i].activityDescription;
+                    var localActivityId = response.data[i].activityId;
+                    var localActivityDate = response.data[i].activityDate;
+                    markers[i] = {
+                        latLong: localLatLong, 
+                        url: localUrl, 
+                        activityTitle: localActivityTitle,
+                        activityDescription: localActivityDescription,
+                        activityId: localActivityId,
+                        activityDate: localActivityDate
+                    };
                 }
                 return markers; 
         })
