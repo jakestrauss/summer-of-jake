@@ -225,11 +225,13 @@ export default function Map() {
                                             <div className="image-container">
                                                 <img style={imgStyle} src={marker.url} alt="Marker"></img>
                                             </div>
-                                            <div><h2 className="activity-title">{dateToDisplay.format('MM/DD/YYYY')}: {marker.activityTitle}</h2></div>
+                                            <h2 className="activity-title">{dateToDisplay.format('MM/DD/YYYY')}: {marker.activityTitle}</h2>
                                             <div className = "marker-description">{marker.activityDescription}
                                             <br></br>
-                                            <br></br>
-                                            <a href={stravaUrl} target="_blank">View on Strava</a>
+                                            <div className="strava-link">
+                                                <a className="strava-link" href={stravaUrl} target="_blank">View on Strava</a>
+                                            </div>
+                                            
                                             </div>
                                         </div>
                                     </InfoWindow>
