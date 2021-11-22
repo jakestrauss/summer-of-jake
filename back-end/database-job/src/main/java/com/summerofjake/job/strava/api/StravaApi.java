@@ -6,14 +6,17 @@ import com.summerofjake.job.strava.api.exception.StravaUnauthorizedException;
 import okhttp3.*;
 import org.apache.tomcat.util.json.JSONParser;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
+import java.util.Properties;
 
 public abstract class StravaApi {
     private static final int UNAUTHORIZED_CODE = 401;
-    private static final String CLIENT_ID = "73993";
-    private static final String CLIENT_SECRET = "a03e053d23dbf54f9484f941362458f61539f0aa";
-    private static final String REFRESH_TOKEN = "e11d7df64aa8e44fa4064b9f4aaeafb61b0b942e";
+    private static String CLIENT_ID;
+    private static String CLIENT_SECRET;
+    private static String REFRESH_TOKEN;
     protected ObjectMapper objectMapper;
     protected static final String STRAVA_BASE_URL = "https://www.strava.com/api/v3/";
     private static final String STRAVA_OAUTH_URL = "https://www.strava.com/oauth/";
@@ -21,6 +24,20 @@ public abstract class StravaApi {
     protected OkHttpClient client;
 
     public StravaApi() {
+        //load in API keys from properties file
+        try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+
+            Properties prop = new Properties();
+            prop.load(input);
+
+            CLIENT_ID = prop.getProperty("strava.clientid");
+            CLIENT_SECRET = prop.getProperty("strava.clientsecret");
+            REFRESH_TOKEN = prop.getProperty("strava.refreshtoken");
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
         this.client = new OkHttpClient();
         this.objectMapper = new ObjectMapper();
         this.accessToken = retrieveAccessToken();

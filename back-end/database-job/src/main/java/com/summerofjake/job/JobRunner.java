@@ -15,7 +15,7 @@ public class JobRunner {
         GetActivityIdsActivity getActivityIdsActivity = new GetActivityIdsActivity(activityApi);
         List<Long> activityIds = getActivityIdsActivity.getActivityIds();
 
-        MarkersActivity markersActivity = new MarkersActivityImpl(activityApi);
-        List<Marker> markers = markersActivity.getMarkers(activityIds);
+//        MarkersActivity markersActivity = new MarkersActivityImpl(activityApi);
+//        List<Marker> markers = markersActivity.getMarkers(activityIds);
     }
 }
